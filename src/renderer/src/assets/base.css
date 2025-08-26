@@ -1,0 +1,41 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'Manrope', ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer base {
+  html {
+    font-family: var(--font-sans);
+    color: white;
+  }
+  .milkdown {
+    --crepe-color-background: transparent !important;
+    color: gainsboro !important;
+    --crepe-color-selected: oklch(55.2% 0.016 285.938) !important;
+  }
+  .milkdown .ProseMirror {
+    padding: 20px 40px 0px 100px !important;
+  }
+  .milkdown .milkdown-toolbar {
+    background: oklch(55.2% 0.016 285.938) !important;
+  }
+  .milkdown .milkdown-toolbar .toolbar-item svg {
+    color: white !important;
+    fill: white !important;
+  }
+  .milkdown .milkdown-toolbar .toolbar-item:hover {
+    background: oklch(46.898% 0.00643 286.034) !important;
+  }
+  .milkdown .crepe-placeholder::before {
+    color: oklch(72.538% 0.01583 285.93) !important;
+  }
+}
+
+header {
+  -webkit-app-region: drag;
+}
+
+button {
+  -webkit-app-region: no-drag;
+}
