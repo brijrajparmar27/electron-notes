@@ -1,5 +1,4 @@
 import { MilkdownProvider } from '@milkdown/react'
-import useNoteContent from '@renderer/hooks/useNoteContent'
 import { NotesContext } from '@renderer/store/NotesContext'
 import { useContext, type FC } from 'react'
 import Lottie from 'react-lottie'
@@ -17,7 +16,6 @@ const defaultOptions = {
 
 const Content: FC = () => {
   const { currentNote } = useContext(NotesContext)
-  const { noteContent } = useNoteContent()
 
   if (!currentNote) {
     return (
@@ -33,7 +31,7 @@ const Content: FC = () => {
         <p className="text-xs">{currentNote.title}</p>
       </div>
       <MilkdownProvider>
-        <MilkdownEditor noteContent={noteContent} />
+        <MilkdownEditor />
       </MilkdownProvider>
     </div>
   )

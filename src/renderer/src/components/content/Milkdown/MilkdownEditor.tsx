@@ -2,49 +2,49 @@ import { Crepe } from '@milkdown/crepe'
 import '@milkdown/crepe/theme/common/style.css'
 import '@milkdown/crepe/theme/frame.css'
 import { Milkdown, useEditor } from '@milkdown/react'
+import useNoteContent from '@renderer/hooks/useNoteContent'
 import useNotesData from '@renderer/hooks/useNotesData'
 import { NotesContext } from '@renderer/store/NotesContext'
 import _ from 'lodash'
-import { useCallback, useContext, useEffect, useMemo } from 'react'
+import { useContext, useEffect } from 'react'
 
-export const MilkdownEditor = ({ noteContent }: { noteContent: string }) => {
-  const { currentNote, setCurrentNote } = useContext(NotesContext)
+export const MilkdownEditor = () => {
+  const { currentNote } = useContext(NotesContext)
+  const { noteContent } = useNoteContent()
   const { setNotes } = useNotesData()
-  const updateFile = useCallback(
-    async (value: string) => {
-      if (!currentNote) return
-      const updatedNote = await window.electron.setNoteContent(currentNote.name, value)
-      setCurrentNote(updatedNote)
-      setNotes((prev) => {
-        const updated = prev.map((each) => {
-          if (each.name === updatedNote.name) {
-            return { ...each, ...updatedNote }
-          }
-          return each
-        })
-        return [...updated]
+  const updateFile = async (value: string) => {
+    if (!currentNote) return
+    const updatedNote = await window.electron.setNoteContent(currentNote.name, value)
+    setNotes((prev) => {
+      const updated = prev.map((each) => {
+        if (each.name === updatedNote.name) {
+          return { ...each, ...updatedNote }
+        }
+        return each
       })
-    },
-    [currentNote, setCurrentNote, setNotes]
-  )
-  const debouncedSearch = useMemo(() => _.debounce((value) => updateFile(value), 500), [updateFile])
-  useEffect(() => {
-    return () => {
-      debouncedSearch.cancel()
-    }
-  }, [debouncedSearch])
-  useEditor((root) => {
-    const crepe = new Crepe({
-      root,
-      defaultValue: noteContent
+      return [...updated]
     })
+  }
+  useEffect(() => console.log(noteContent), [noteContent])
 
-    crepe.on((listener) => {
-      listener.markdownUpdated((_, markdown) => {
-        debouncedSearch(markdown)
+  const debouncedSearch = _.debounce((value) => {
+    updateFile(value)
+  }, 500)
+  useEditor(
+    (root) => {
+      const crepe = new Crepe({
+        root,
+        defaultValue: noteContent
       })
-    })
-    return crepe
-  }, [])
+
+      crepe.on((listener) => {
+        listener.markdownUpdated((_, markdown) => {
+          debouncedSearch(markdown)
+        })
+      })
+      return crepe
+    },
+    [noteContent]
+  )
   return <Milkdown />
 }
