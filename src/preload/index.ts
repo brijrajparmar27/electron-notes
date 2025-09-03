@@ -2,6 +2,7 @@ import { contextBridge, ipcRenderer } from 'electron'
 
 // Custom APIs for renderer
 const apis = {
+  getPlateformInfo: () => ipcRenderer.invoke('system:info'),
   getNotes: () => ipcRenderer.invoke('notes:getAll'),
   createNote: () => ipcRenderer.invoke('notes:create'),
   getNoteContent: (name: string) => ipcRenderer.invoke('notes:get', { name }),

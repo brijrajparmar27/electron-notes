@@ -3,6 +3,7 @@ import { app, BrowserWindow, ipcMain, shell } from 'electron'
 import { join } from 'path'
 import icon from '../../resources/icon.png?asset'
 import { createNote, getALLNotes, getNoteData, setNoteData } from './lib/fileHelper'
+import { getSystemInfo } from './lib/systemUtils'
 
 function createWindow(): void {
   // Create the browser window.
@@ -55,6 +56,15 @@ app.whenReady().then(() => {
   // see https://github.com/alex8088/electron-toolkit/tree/master/packages/utils
   app.on('browser-window-created', (_, window) => {
     optimizer.watchWindowShortcuts(window)
+  })
+
+  ipcMain.handle('system:info', async () => {
+    try {
+      return await getSystemInfo()
+    } catch (err) {
+      console.error('Failed to get notes', err)
+      throw err
+    }
   })
 
   ipcMain.handle('notes:getAll', async () => {

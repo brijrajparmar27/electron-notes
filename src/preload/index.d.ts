@@ -1,6 +1,9 @@
 declare global {
   interface Window {
     electron: {
+      getPlateformInfo: () => Promise<{
+        os: string
+      }>
       getNotes: () => Promise<
         Array<
           Pick<

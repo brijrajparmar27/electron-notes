@@ -25,7 +25,10 @@ const Sidebar = () => {
           <p>Add Notes</p>
         </button>
       </div>
-      <div className="flex flex-col gap-2 h-full box-border overflow-y-scroll pb-12 pt-5">
+      <div
+        className="flex flex-col gap-2 h-full box-border overflow-y-scroll pb-12 pt-5"
+        id="scrollbar1"
+      >
         {notes.map((each, i) => {
           return (
             <div
