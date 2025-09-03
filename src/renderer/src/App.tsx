@@ -8,7 +8,7 @@ function App() {
   return (
     <NotesProvider>
       <SystemInfoProvider>
-        <div className="h-screen w-screen bg-zinc-800">
+        <div className="h-screen w-screen">
           <RootLayout sidebar={<Sidebar />} content={<Content />} />
         </div>
       </SystemInfoProvider>
